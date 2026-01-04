@@ -1,4 +1,5 @@
 
+<img width="500" height="400" alt="three_cities_networks" src="https://github.com/user-attachments/assets/0bf5f83b-0777-47fa-b76b-81b9d2932cca" />
 
 # City Street Networks Dataset (120 Cities) — Task 3 Challenge
 
@@ -49,8 +50,6 @@ Training labels are provided in:
   - `filename`
   - `target`
 
-
-
 ---
 
 ## What You Need To Do (Participant)
@@ -97,9 +96,7 @@ So the node feature matrix is:
 ### Adjacency (GCN Normalization)
 The baseline builds a sparse adjacency matrix with self-loops and applies standard GCN normalization:
 
-\[
-\hat{A} = D^{-1/2} (A + I) D^{-1/2}
-\]
+Normalized adjacency: D^{-1/2}(A+I)D^{-1/2}
 
 This improves stability compared to using a raw adjacency matrix.
 
@@ -138,3 +135,4 @@ filename,prediction
 City1.pkl,2
 City2.pkl,0
 ...
+
