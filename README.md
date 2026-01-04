@@ -1,5 +1,5 @@
 
-<img width="500" height="400" alt="three_cities_networks" src="https://github.com/user-attachments/assets/0bf5f83b-0777-47fa-b76b-81b9d2932cca" />
+<img width="700" height="600" alt="three_cities_networks" src="https://github.com/user-attachments/assets/0bf5f83b-0777-47fa-b76b-81b9d2932cca" />
 
 # City Street Networks Dataset (120 Cities) — Task 3 Challenge
 
@@ -135,4 +135,5 @@ filename,prediction
 City1.pkl,2
 City2.pkl,0
 ...
+
 
