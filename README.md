@@ -3,6 +3,8 @@
 
 # City Street Networks Dataset (120 Cities) — Task 3 Challenge
 
+🏆 View Live Leaderboard: [Open leaderboard](https://murad-hossen.github.io/City-Graph-Class-challenge/leaderboard/index.html)
+
 This dataset comprises street network graphs for 120 diverse cities across continents including North America, South America, Europe, Asia, Africa, Australia & Oceania, and others like the Middle East and Central Asia. The graphs are extracted from OpenStreetMap using OSMnx, focusing on driveable roads within a 500-meter buffer around each city's central point.
 
 The dataset includes a total of 120 cities with an unbalanced distribution of street network types reflecting real-world urban patterns: 37 grid cities (such as planned orthogonal layouts like Salt Lake City, USA), 31 organic cities (such as irregular, historic winding streets like Boston, USA), and 52 hybrid cities (such as mixed elements like Atlanta, USA).
@@ -71,6 +73,8 @@ Boston_Massachusetts_USA.pkl,2
 Delhi_India.pkl,0
 Turin_Italy.pkl,1
 ...
+
+---
 
 ## Baseline Model (GCN) — Details
 

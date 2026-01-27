@@ -27,7 +27,7 @@ This repo uses a simple static leaderboard rendered from `leaderboard/leaderboar
    - Open `leaderboard/index.html` locally, or
    - Serve it via GitHub Pages.
 
-### GitHub Pages (optional)
+### GitHub Pages 
 
 If you want a public web page:
 1. Enable GitHub Pages in the repo settings.

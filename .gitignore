@@ -4,3 +4,4 @@ __pycache__
 
 .ipynb_checkpoints/
 submissions/baseline_model.csv
+leaderboard/test_labels_hidden.csv
