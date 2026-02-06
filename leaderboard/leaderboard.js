@@ -1,5 +1,5 @@
 const LEADERBOARD_CONFIG = {
-    csvPath: 'leaderboard.csv',
+    csvPath: './leaderboard.csv',
     sortBy: 'validation_f1_score',
     primaryScoreField: 'validation_f1_score',
     fieldNames: {
@@ -53,7 +53,7 @@ class LeaderboardManager {
     }
 
     async loadData() {
-        const response = await fetch(this.config.csvPath);
+        const response = await fetch(this.config.csvPath, { cache: 'no-store' });
         if (!response.ok) {
             throw new Error(`Failed to load leaderboard data: ${response.statusText}`);
         }
