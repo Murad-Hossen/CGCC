@@ -33,6 +33,7 @@ jobs:
       - name: Find and Process Submission
         env:
           SUBMISSION_PRIVATE_KEY: ${{ secrets.SUBMISSION_PRIVATE_KEY }}
+          TEST_LABELS_CSV: ${{ secrets.TEST_LABELS_CSV }}
         run: |
           python .github/scripts/process_submission.py
           
