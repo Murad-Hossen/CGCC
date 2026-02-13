@@ -9,3 +9,4 @@ leaderboard/test_labels_hidden.csv
 .venv
 private_key.pem
 .env
+*.csv
