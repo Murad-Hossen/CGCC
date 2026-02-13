@@ -5,7 +5,9 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.fernet import Fernet
 
 def encrypt_file(input_file_path):
-    with open("public_key.pem", "rb") as key_file:
+    _dir = os.path.dirname(os.path.abspath(__file__))
+    key_path = os.path.join(_dir, "public_key.pem")
+    with open(key_path, "rb") as key_file:
         public_key = serialization.load_pem_public_key(key_file.read())
 
     session_key = Fernet.generate_key()
