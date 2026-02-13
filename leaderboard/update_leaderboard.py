@@ -2,10 +2,10 @@ from pathlib import Path
 
 import pandas as pd
 
-from calculate_scores import get_leaderboard_data
+from .calculate_scores import get_leaderboard_data
 
 
-def main() -> None:
+def update_leaderboard_csv() -> None:
     leaderboard_data = get_leaderboard_data()
     output_path = Path(__file__).resolve().parent / "leaderboard.csv"
     df = pd.DataFrame(leaderboard_data)
@@ -14,4 +14,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    update_leaderboard_csv()

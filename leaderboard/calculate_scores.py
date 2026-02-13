@@ -1,11 +1,11 @@
 import os
 from datetime import datetime
 from pathlib import Path
-
+from .hidden_labels_reader import read_hidden_labels
 import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score
 
-validation_data_file = "../my_validation_data/validation_data.csv"
+# validation_data_file = "../my_validation_data/validation_data.csv"
 # validation_data = pd.read_csv(validation_data_file) for example
 
 SUBMISSIONS_DIR = Path(__file__).resolve().parent.parent / "submissions"
@@ -41,28 +41,15 @@ def _team_name_from_path(path: Path) -> str:
 
 
 def calculate_scores(submission_path: Path):
-    base_dir = Path(__file__).resolve().parent
     submission_path = Path(submission_path).resolve()
-
-    labels_path = os.environ.get("HIDDEN_LABELS_PATH") or os.environ.get("TEST_LABELS_PATH")
-    validation_path = os.environ.get("VALIDATION_DATA_PATH")
-
-    if validation_path and os.path.exists(validation_path):
-        labels_path = validation_path
-    elif not labels_path:
-        # Local fallback paths (do not commit hidden labels)
-        local_candidates = [
-            base_dir / "test_labels_hidden.csv",
-            base_dir.parent / "data" / "test_labels_hidden.csv",
-        ]
-        labels_path = next((str(p) for p in local_candidates if p.exists()), None)
 
     if not submission_path.exists():
         raise FileNotFoundError(f"Submission file not found: {submission_path}")
-    if not labels_path or not os.path.exists(labels_path):
-        raise FileNotFoundError("Labels file not found. Set HIDDEN_LABELS_PATH in CI.")
 
-    labels_df = pd.read_csv(labels_path)
+    labels_df = read_hidden_labels()
+    if labels_df is None:
+        raise FileNotFoundError("Labels file not found. Have you added TEST_LABELS_CSV to your .env file or secrets?")
+    
     submission_df = pd.read_csv(submission_path)
 
     if "filename" not in labels_df.columns or "target" not in labels_df.columns:
