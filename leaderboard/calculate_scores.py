@@ -5,26 +5,11 @@ from .hidden_labels_reader import read_hidden_labels
 import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score
 
-# validation_data_file = "../my_validation_data/validation_data.csv"
-# validation_data = pd.read_csv(validation_data_file) for example
-
 SUBMISSIONS_DIR = Path(__file__).resolve().parent.parent / "submissions"
-INBOX_DIR = SUBMISSIONS_DIR / "inbox"
 
 def read_submission_files():
-    submission_files = []
-
-    if SUBMISSIONS_DIR.exists():
-        # Legacy flat submissions/*.csv
-        submission_files.extend(
-            [(SUBMISSIONS_DIR / f).resolve() for f in os.listdir(SUBMISSIONS_DIR) if f.endswith(".csv")]
-        )
-
-    if INBOX_DIR.exists():
-        # New structure: submissions/inbox/<team>/<run>/predictions.csv
-        submission_files.extend([p.resolve() for p in INBOX_DIR.rglob("predictions.csv")])
-
-    return submission_files
+    files = os.listdir(SUBMISSIONS_DIR)
+    return [f"{SUBMISSIONS_DIR}/{f}" for f in files if f.endswith('.csv')]
 
 
 def _team_name_from_path(path: Path) -> str:

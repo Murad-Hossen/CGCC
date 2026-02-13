@@ -30,16 +30,12 @@ def calculate_submission_score(decrypted_file_path):
     return score
 
 def process_submission():
-    try:
-        encrypted_file = read_latest_submission()
-        decrypted_file = decrypt_submission_file(encrypted_file)
-        # now the data is saved to a decrypted file ending with ".csv"
-        # the leaderboard should be set up to automatically pick up this file and use the logic in calcuate_scores.py
-        # to show the new entries (files ending with .csv) on the leaderboard
-        
-        update_leaderboard_csv()
-    except Exception as e:
-        print(f"Error processing submission: {e}")
+    encrypted_file = read_latest_submission()
+    decrypted_file = decrypt_submission_file(encrypted_file)
+    # now the data is saved to a decrypted file ending with ".csv"
+    # the leaderboard should be set up to automatically pick up this file and use the logic in calcuate_scores.py
+    # to show the new entries (files ending with .csv) on the leaderboard
+    update_leaderboard_csv()
 
 if __name__ == "__main__":
     process_submission()

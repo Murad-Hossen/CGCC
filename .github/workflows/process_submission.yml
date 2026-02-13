@@ -34,8 +34,8 @@ jobs:
         env:
           SUBMISSION_PRIVATE_KEY: ${{ secrets.SUBMISSION_PRIVATE_KEY }}
         run: |
-          # The logic in your script to find the file is fine
           python .github/scripts/process_submission.py
+          
 
       - name: Commit and Push Changes
         run: |
