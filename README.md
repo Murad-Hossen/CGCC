@@ -253,6 +253,7 @@ City1.pkl,2
 City2.pkl,0
 ...
 ```
+<<<<<<< HEAD
 
 
 
@@ -286,3 +287,5 @@ A, X, label = load_city_graph("gnn_challenge/data/train/Boston_Massachusetts_USA
 
 print(f"Adjacency Shape: {A.shape}") # (N, N)
 print(f"Feature Shape:   {X.shape}") # (N, 2)
+=======
+>>>>>>> 1a0d3b2645b127c72b75e9723caae2a03d1e9f55
