@@ -1,36 +1,43 @@
-## Leaderboard Setup
+# Leaderboard Setup
 
-This repo follows the template design:
-- Authoritative data: `leaderboard/leaderboard.csv`
-- Auto-generated Markdown: `leaderboard/leaderboard.md`
-- Interactive UI: `docs/leaderboard.html` (GitHub Pages)
+This repo uses encrypted submissions and automatic scoring:
 
-### How to publish results on GitHub
+- **Submissions**: Place your prediction CSV in the `submissions/` folder. Only **encrypted** files (`.enc`) are accepted for scoring; raw `.csv` files are git-ignored and must not be pushed.
+- **Authoritative data**: `leaderboard/leaderboard.csv`
+- **Auto-generated Markdown**: this file (`leaderboard.md`)
+- **Interactive UI**: e.g. `docs/leaderboard.html` or the published GitHub Pages site.
 
-1. Open a Pull Request that adds:
-   - `submissions/inbox/<team_name>/<run_id>/predictions.csv`
-   - `submissions/inbox/<team_name>/<run_id>/metadata.json`
-   - Format: `filename,prediction`
+---
 
-2. Automatic scoring (GitHub Actions)
-   - On PR open, the workflow validates and scores the submission.
-   - Hidden labels are provided via the `TEST_LABELS_CSV` GitHub Secret.
+## For competitors: how to submit
 
-3. Leaderboard update (on merge)
-   - When the PR is merged, `leaderboard/leaderboard.csv` and
-     `leaderboard/leaderboard.md` are regenerated automatically.
+1. **Prepare your submission**
+   - Save your predictions as a `.csv` in the **`submissions/`** folder with columns `filename` and `prediction` (see `submissions/sample_submission.csv`).
+   - `.csv` files in `submissions/` are git-ignored; they will not be committed.
 
-4. View the leaderboard UI
-   - Open `docs/leaderboard.html` locally, or
-   - Enable GitHub Pages with source `main` and folder `/docs`.
+2. **Encrypt your submission**
+   - From the project root, go into `submissions/` and run the encryption script:
+     - **Linux / macOS:** `cd submissions` then `python encrypt_submissions.py`
+     - **Windows:** `cd submissions` then `python encrypt_submissions.py`
+   - This creates a `.enc` file next to each `.csv` (e.g. `my_submission.csv.enc`).
 
-### GitHub Pages 
+3. **Push the encrypted file**
+   - Commit and push the new `.enc` file(s) in `submissions/` (e.g. via a Pull Request or as required by the challenge).
 
-If you want a public web page:
-1. Enable GitHub Pages in the repo settings.
-2. Use the `main` branch and `/docs` folder.
+4. **Automatic scoring**
+   - On **push to main**, a GitHub Action runs that:
+     - Finds the **latest** `.enc` file in `submissions/`
+     - Decrypts it using the organisers’ private key (via `SUBMISSION_PRIVATE_KEY` secret)
+     - Scores it against the hidden test labels (`TEST_LABELS_CSV` secret)
+     - Updates `leaderboard/leaderboard.csv` and `leaderboard.md`
 
-### Important note
+5. **View the leaderboard**
+   - Open the published leaderboard (e.g. the link in the main README), or
+   - Enable GitHub Pages with source `main` and folder `/docs` to serve the leaderboard UI.
 
-Hidden test labels must not be committed to the repo. Use the
-`TEST_LABELS_CSV` GitHub Secret for automatic scoring.
+---
+
+## For organisers
+
+- **Secrets**: Configure `SUBMISSION_PRIVATE_KEY` and `TEST_LABELS_CSV` in the repository secrets. Hidden test labels must not be committed.
+- **Publishing**: To publish the leaderboard, enable GitHub Pages and set the source to the `main` branch and the `/docs` folder (or the path where the leaderboard HTML/CSV are served).
