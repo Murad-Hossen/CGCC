@@ -1,15 +1,17 @@
 name: Process Secure Submission
 
+# CHANGE 1: Trigger on PUSH to main (instead of PR closed)
 on:
-  pull_request:
-    types: [closed]
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   process-merged-file:
-    if: github.event.pull_request.merged == true
+    # CHANGE 2: Remove the "if merged" check (Push implies merge)
     runs-on: ubuntu-latest
     
     steps:
@@ -32,18 +34,14 @@ jobs:
         env:
           SUBMISSION_PRIVATE_KEY: ${{ secrets.SUBMISSION_PRIVATE_KEY }}
         run: |
+          # The logic in your script to find the file is fine
           python .github/scripts/process_submission.py
 
-      # Step E: Commit and Push the results
       - name: Commit and Push Changes
         run: |
           git config user.name "SubmissionBot"
           git config user.email "bot@noreply.github.com"
-          
-          # Add all changes (processed data + deleted .enc files)
           git add .
-          
-          # Only commit if there are actual changes
           if ! git diff-index --quiet HEAD; then
             git commit -m "Processed new submission [skip ci]"
             git push
