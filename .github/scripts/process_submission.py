@@ -11,12 +11,12 @@ from leaderboard.update_leaderboard import update_leaderboard_csv
 
 SUBMISSION_DIR = os.path.join(project_root, "submissions")
 
-def read_latest_submission():
+def list_encrypted_submissions():
     files = [f for f in os.listdir(SUBMISSION_DIR) if f.endswith(".enc")]
     if not files:
         raise NoEncryptedFileError("No encrypted submission files found in 'submissions' directory.")
-    latest_file = max(files, key=lambda f: os.path.getmtime(os.path.join(SUBMISSION_DIR, f)))
-    return os.path.join(SUBMISSION_DIR, latest_file)
+    # Return absolute paths for all encrypted submissions
+    return [os.path.join(SUBMISSION_DIR, f) for f in files]
 
 
 def decrypt_submission_file(encrypted_file_path):
@@ -33,12 +33,20 @@ def calculate_submission_score(decrypted_file_path):
     return score
 
 def process_submission():
+    """
+    Decrypt all encrypted submissions and refresh the leaderboard.
+
+    This avoids relying on filesystem modification times and ensures that
+    every *.csv.enc file under `submissions/` is available as a *.csv
+    when we recompute the leaderboard.
+    """
     try:
-        encrypted_file = read_latest_submission()
-        decrypted_file = decrypt_submission_file(encrypted_file)
-        # now the data is saved to a decrypted file ending with ".csv"
-        # the leaderboard should be set up to automatically pick up this file and use the logic in calcuate_scores.py
-        # to show the new entries (files ending with .csv) on the leaderboard
+        encrypted_files = list_encrypted_submissions()
+        for encrypted_file in encrypted_files:
+            decrypt_submission_file(encrypted_file)
+
+        # Now that all encrypted submissions have corresponding .csv files,
+        # rebuild the leaderboard from every CSV in the submissions directory.
         update_leaderboard_csv()
     except NoEncryptedFileError as e:
         print(f"Error: {e}")
