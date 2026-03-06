@@ -12,7 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, accuracy_score
 
 
-DATA_DIR = os.path.join("gnn_challenge", "data")
+DATA_DIR = "data"
 TRAIN_DIR = os.path.join(DATA_DIR, "train")
 TEST_DIR = os.path.join(DATA_DIR, "test")
 TRAIN_LABELS_CSV = os.path.join(DATA_DIR, "train_labels.csv")
@@ -193,7 +193,10 @@ class BaselineGCN(nn.Module):
         x = self.bn3(x)
         x = F.relu(x)
 
-        g =  x.sum(dim=0)
+        
+        g_mean = x.mean(dim=0)
+        g_max = x.max(dim=0).values
+        g = torch.cat([g_mean, g_max], dim=0)
 
         return self.cls(g)
 

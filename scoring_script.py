@@ -11,7 +11,7 @@ def main():
 
     submission_path = sys.argv[1]
 
-    data_dir = os.path.join("gnn_challenge", "data")
+    data_dir = os.path.join("data")
     truth_path = os.path.join(data_dir, "test_labels_hidden.csv")
 
     sub = pd.read_csv(submission_path)
