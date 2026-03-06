@@ -3,6 +3,7 @@ import pickle
 import numpy as np
 import pandas as pd
 import networkx as nx
+import platform
 
 import torch
 import torch.nn as nn
@@ -203,7 +204,7 @@ class BaselineGCN(nn.Module):
 
 model = BaselineGCN().to(DEVICE)
 # ----- Sanae changes lr and weight -----
-optimizer = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=5e-4)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.003, weight_decay=5e-4)
 criterion = nn.CrossEntropyLoss(weight=class_weights)
 
 
@@ -285,8 +286,22 @@ with torch.no_grad():
         pred = int(torch.argmax(logits, dim=1).item())
         pred_rows.append({"filename": fn, "prediction": pred})
 
+
+print("===== Hardware Specs =====")
+
+print("OS:", platform.system(), platform.release())
+print("Processor:", platform.processor())
+print("CPU cores:", os.cpu_count())
+
+if torch.cuda.is_available():
+    print("GPU:", torch.cuda.get_device_name(0))
+else:
+    print("GPU: Not available")
+
+print("RAM: Check system info manually if needed")
+
 submission = pd.DataFrame(pred_rows).sort_values("filename")
-out_path = os.path.join(DATA_DIR, "sanae_submission.csv")
+out_path = os.path.join("submissions", "sanae_submission.csv")
 submission.to_csv(out_path, index=False)
 
 print(f"\nWrote: {out_path}")
