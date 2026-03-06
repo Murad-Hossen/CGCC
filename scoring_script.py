@@ -7,7 +7,7 @@ from sklearn.metrics import f1_score, accuracy_score
 
 def main():
     if len(sys.argv) < 2:
-        raise SystemExit("Usage: python scoring_script.py path/to/sanae_submission.csv")
+        raise SystemExit("Usage: python scoring_script.py path/to/sanae_submission.csv.enc")
 
     submission_path = sys.argv[1]
 
