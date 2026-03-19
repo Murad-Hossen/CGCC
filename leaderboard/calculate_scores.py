@@ -1,4 +1,5 @@
 import os
+import subprocess
 from datetime import datetime
 from pathlib import Path
 from .hidden_labels_reader import read_hidden_labels
@@ -35,6 +36,52 @@ def _team_name_from_path(path: Path) -> str:
         except (IndexError, ValueError):
             return path.stem
     return path.stem
+
+
+def _git_last_commit_timestamp(path: Path) -> str | None:
+    """Return last commit timestamp for a file, formatted for leaderboard CSV."""
+    repo_root = Path(__file__).resolve().parent.parent
+    rel_path = path.resolve().relative_to(repo_root)
+    try:
+        result = subprocess.run(
+            [
+                "git",
+                "-C",
+                str(repo_root),
+                "log",
+                "-1",
+                "--format=%cI",
+                "--",
+                str(rel_path),
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    except Exception:
+        return None
+
+    iso_timestamp = result.stdout.strip()
+    if result.returncode != 0 or not iso_timestamp:
+        return None
+
+    try:
+        return datetime.fromisoformat(iso_timestamp).strftime("%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        return None
+
+
+def _submission_timestamp(submission_path: Path) -> str:
+    """Prefer commit timestamp of `<team>.csv.enc`; fallback to local file mtime."""
+    encrypted_path = submission_path.with_suffix(submission_path.suffix + ".enc")
+    if encrypted_path.exists():
+        commit_ts = _git_last_commit_timestamp(encrypted_path)
+        if commit_ts:
+            return commit_ts
+
+    return datetime.fromtimestamp(submission_path.stat().st_mtime).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
 
 
 def calculate_scores(submission_path: Path):
@@ -91,9 +138,7 @@ def get_leaderboard_data():
     for submission_path in files:
         submission_path = Path(submission_path)
         team_name = _team_name_from_path(submission_path)
-        timestamp = datetime.fromtimestamp(submission_path.stat().st_mtime).strftime(
-            "%Y-%m-%d %H:%M:%S"
-        )
+        timestamp = _submission_timestamp(submission_path)
         try:
             team_scores = calculate_scores(submission_path)
         except Exception as e:
