@@ -1,3 +1,4 @@
+<img width="5370" height="1775" alt="three_cities_networks" src="https://github.com/user-attachments/assets/53d2210f-01f7-4594-9909-303f107eed51" />
 
 
 # City Graph class challenge (CGCC)
